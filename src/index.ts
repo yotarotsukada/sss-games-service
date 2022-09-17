@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { createServer } from 'http';
@@ -7,35 +6,33 @@ import { Server, Socket } from 'socket.io';
 const app = express();
 const httpServer = createServer(app);
 
-const CLIENT_URL = process.env.DEV
-  ? 'http://localhost:5173'
-  : 'https://sss-games.vercel.app';
+app.use(cors());
+
+const CLIENT_URL = 'http://localhost:5173';
 const corsOption = {
-  origin: CLIENT_URL,
+  cors: {
+    origin: CLIENT_URL,
+  },
 };
 
-app.use(cors(corsOption));
-
-const io = new Server(httpServer, { cors: corsOption });
+const io = new Server(httpServer, corsOption);
 io.on('connection', (socket: Socket) => {
-  console.log(`socket client connected at ${new Date()}`);
+  console.log('connected!');
   socket.on('message', (message) => {
     io.emit('message', `${message} (${new Date().toISOString()})`);
   });
 });
 
 app.get('/', (req: Request, res: Response) => {
-  console.log(`"/" requested at ${new Date()}`);
+  console.log('requested');
   res.send('Express Server!!');
 });
 app.get('/user', (req: Request, res: Response) => {
-  console.log(`"/user" requested at ${new Date()}`);
+  console.log('requested');
   setTimeout(() => res.send({ name: 'Yotaro' }), 1000);
 });
 
 const port = process.env.PORT || 8080;
 httpServer.listen(port, () => {
-  if (process.env.DEV) {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
-  }
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });

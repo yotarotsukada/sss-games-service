@@ -7,14 +7,10 @@ import { Server, Socket } from 'socket.io';
 const app = express();
 const httpServer = createServer(app);
 
-const CLIENT_URL = process.env.DEV
-  ? 'http://localhost:5173'
-  : 'https://sss-games.vercel.app';
 const corsOption = {
-  origin: CLIENT_URL,
+  origin: process.env.CLIENT_URL,
   credentials: true,
 };
-
 app.use(cors(corsOption));
 
 const io = new Server(httpServer, { cors: corsOption });

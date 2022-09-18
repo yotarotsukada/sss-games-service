@@ -9,7 +9,7 @@ const app = express();
 const httpServer = createServer(app);
 
 const corsOption = {
-  origin: process.env.CLIENT_URL,
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
 };
 app.use(cors(corsOption));

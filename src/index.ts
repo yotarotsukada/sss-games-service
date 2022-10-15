@@ -21,6 +21,7 @@ const corsOption = {
   credentials: true,
 };
 app.use(cors(corsOption));
+app.use(express.json());
 
 const io = new Server(httpServer, { cors: corsOption });
 io.on('connection', (socket: Socket) => {
@@ -42,16 +43,30 @@ app.get('/user', (req: Request, res: Response) => {
 });
 
 app.post('/api/rooms', (req: Request, res: Response) => {
-  printLog(`"/api/users" was requested`);
-  roomRegister;
+  printLog(`"/api/rooms" was requested`);
+  try {
+    const room = roomRegister(
+      req.body.ownerId,
+      req.body.name,
+      req.body.password
+    );
+    res.status(200).send(room);
+  } catch (err) {
+    res.status(500).send('REGISTERATION FAILED!');
+  }
 });
 app.get('/api/rooms/users/:id', (req: Request, res: Response) => {
   printLog(`"/api/rooms/users/:id" was requested`);
-  roomSearchAll;
+  //roomSearchAll(req.params.id);
 });
 app.get('/api/rooms/:id', (req: Request, res: Response) => {
   printLog(`"/api/rooms/:id" was requested`);
-  roomSearch;
+  try {
+    const room = roomSearch(req.params.id);
+    res.status(200).send(room);
+  } catch (err) {
+    res.status(404).send('NOT FOUND!');
+  }
 });
 app.put('/api/rooms/:id', (req: Request, res: Response) => {
   printLog(`"/api/rooms/:id" was requested`);

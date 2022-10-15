@@ -1,6 +1,8 @@
 import exp from 'constants';
 import fs from 'fs';
 import { printLog } from '../util/console';
+import { Room, roomData } from './data';
+import { v4 as uuidv4 } from 'uuid';
 
 export {
   roomRegister,
@@ -11,38 +13,34 @@ export {
   roomState,
 };
 
-type Room = {
-  id: string;
-  ownerId: string; // ルームを作成したユーザのID
-  createdAt: Date;
-  lastUpdatedAt: Date;
-  isOpen: boolean; // 入室可能かどうか
-  isStarted: boolean; // ゲームが開始したかどうか
-  name: string;
-  password: string; // 任意で設定できる入室パスワード
-};
-
 /**
  * ルーム情報の外部ファイルへの登録
  * @param ownerId
  * @param name
  * @param password
  */
-const roomRegister = (ownerId: string, name: string, password?: string) => {
-  let room = {
-    id: '',
-    ownertId: ownerId,
-    createAt: '',
-    lastUpdateAt: '',
+const roomRegister = (
+  ownerId: string,
+  name: string,
+  password?: string
+): Room => {
+  const now = new Date();
+  const id = getId();
+  const room: Room = {
+    id,
+    ownerId,
+    createdAt: now,
+    lastUpdatedAt: now,
     isOpen: true,
     isStarted: false,
-    name: name,
-    password: password,
+    name,
+    password,
   };
-  let data = JSON.stringify(room);
-  fs.appendFile('./room.json', data, () => {
-    console.log('Regist Success!');
-  });
+  const length = roomData.length;
+  roomData.push(room);
+  if (length === roomData.length) {
+    throw new Error('REGISTRATION FAILED!');
+  }
   return room;
 };
 /**
@@ -59,7 +57,17 @@ const roomSearchAll = (ownerId: string, name: string) => {
  * ルームIDからのルーム情報の取得
  * @param id
  */
-const roomSearch = (id: string) => {};
+const roomSearch = (id: string) => {
+  console.log('ID=', id);
+  const room = roomData.find((item) => {
+    return item.id === id;
+  });
+  if (!room) {
+    throw new Error('NOT FOUND!');
+  }
+  console.log(room);
+  return room;
+};
 /**
  * ルームの名前・パスワード変更(空白：変更なし)
  * @param id
@@ -80,3 +88,11 @@ const roomOpen = (id: string) => {
  */
 const roomState = (id: string) => {};
 const roomInsert = (data: any) => {};
+/**
+ *IDの取得 (使用されているIDの最大値より1大きい値を返す)
+ * @returns id
+ */
+const getId = () => {
+  const id = uuidv4();
+  return id;
+};

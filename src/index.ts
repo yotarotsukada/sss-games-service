@@ -5,12 +5,12 @@ import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import { printLog } from './util/console';
 import {
-  roomOpen,
-  roomRegister,
-  roomSearch,
-  roomSearchAll,
-  roomState,
-  roomUpdate,
+  openRoom,
+  registerRoom,
+  searchAllRoom,
+  searchRoom,
+  stateRoom,
+  updateRoom,
 } from './room/room';
 
 const app = express();
@@ -45,7 +45,7 @@ app.get('/user', (req: Request, res: Response) => {
 app.post('/api/rooms', (req: Request, res: Response) => {
   printLog(`"/api/rooms" was requested`);
   try {
-    const room = roomRegister(
+    const room = registerRoom(
       req.body.ownerId,
       req.body.name,
       req.body.password
@@ -57,12 +57,18 @@ app.post('/api/rooms', (req: Request, res: Response) => {
 });
 app.get('/api/rooms/users/:id', (req: Request, res: Response) => {
   printLog(`"/api/rooms/users/:id" was requested`);
-  //roomSearchAll(req.params.id);
+  try {
+    console.log(req.params);
+    const roomList = searchAllRoom(req.params.id);
+    res.status(200).send(roomList);
+  } catch (err) {
+    res.status(404).send('NOT FOUND!');
+  }
 });
 app.get('/api/rooms/:id', (req: Request, res: Response) => {
   printLog(`"/api/rooms/:id" was requested`);
   try {
-    const room = roomSearch(req.params.id);
+    const room = searchRoom(req.params.id);
     res.status(200).send(room);
   } catch (err) {
     res.status(404).send('NOT FOUND!');
@@ -70,15 +76,15 @@ app.get('/api/rooms/:id', (req: Request, res: Response) => {
 });
 app.put('/api/rooms/:id', (req: Request, res: Response) => {
   printLog(`"/api/rooms/:id" was requested`);
-  roomUpdate;
+  updateRoom;
 });
 app.put('/api/rooms/:id/state', (req: Request, res: Response) => {
   printLog(`"/api/rooms/:id"/state was requested`);
-  roomOpen;
+  openRoom;
 });
 app.put('/api/rooms/users/:id', (req: Request, res: Response) => {
   printLog(`"/api/rooms/:id/game-state" was requested`);
-  roomState;
+  stateRoom;
 });
 
 const port = process.env.PORT || 8080;

@@ -5,12 +5,12 @@ import { Room, roomData } from './data';
 import { v4 as uuidv4 } from 'uuid';
 
 export {
-  roomRegister,
-  roomSearchAll,
-  roomSearch,
-  roomUpdate,
-  roomOpen,
-  roomState,
+  registerRoom,
+  searchAllRoom,
+  searchRoom,
+  updateRoom,
+  openRoom,
+  stateRoom,
 };
 
 /**
@@ -19,7 +19,7 @@ export {
  * @param name
  * @param password
  */
-const roomRegister = (
+const registerRoom = (
   ownerId: string,
   name: string,
   password?: string
@@ -48,16 +48,17 @@ const roomRegister = (
  * @param ownerId
  * @param name
  */
-const roomSearchAll = (ownerId: string, name: string) => {
-  let Room: string[];
-  Room = [''];
-  return Room;
+const searchAllRoom = (ownerId: string) => {
+  const roomList = roomData.filter((item) => {
+    return item.ownerId === ownerId;
+  });
+  return roomList;
 };
 /**
  * ルームIDからのルーム情報の取得
  * @param id
  */
-const roomSearch = (id: string) => {
+const searchRoom = (id: string): Room => {
   console.log('ID=', id);
   const room = roomData.find((item) => {
     return item.id === id;
@@ -65,7 +66,6 @@ const roomSearch = (id: string) => {
   if (!room) {
     throw new Error('NOT FOUND!');
   }
-  console.log(room);
   return room;
 };
 /**
@@ -74,22 +74,21 @@ const roomSearch = (id: string) => {
  * @param name
  * @param password
  */
-const roomUpdate = (id: string, name: string, password: string) => {};
+const updateRoom = (id: string, name: string, password: string) => {};
 /**
  * 入室可否の更新
  * @param id
  */
-const roomOpen = (id: string) => {
-  roomSearch(id);
+const openRoom = (id: string) => {
+  searchRoom(id);
 };
 /**
  * ゲーム状況(開始・停止)
  * @param id
  */
-const roomState = (id: string) => {};
-const roomInsert = (data: any) => {};
+const stateRoom = (id: string) => {};
 /**
- *IDの取得 (使用されているIDの最大値より1大きい値を返す)
+ *IDの取得 (uuid生成)
  * @returns id
  */
 const getId = () => {

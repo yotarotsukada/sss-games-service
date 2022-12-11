@@ -27,7 +27,7 @@ export const roomData: Room[] = [
     lastUpdatedAt: new Date(),
     isOpen: true,
     isStarted: false,
-    name: 'test2',
+    name: 'test',
     password: '',
   },
 ];

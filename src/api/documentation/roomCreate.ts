@@ -1,12 +1,7 @@
-export type roomCreateReqBody = {
-  ownerId: string;
-  name: string;
-  password?: string;
-};
+import { z } from 'zod';
 
-export type roomCreateResBody = {
-  room?: domain.Room;
-  error?: string;
-};
-
-// TODO コントローラの実装に反映する
+export const roomCreateReqBody = z.object({
+  ownerId: z.string(),
+  name: z.string().trim().min(1),
+  password: z.string().optional(),
+});

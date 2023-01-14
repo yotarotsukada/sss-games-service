@@ -1,16 +1,18 @@
 import cuid from 'cuid';
 import { Request, Response } from 'express';
+import { validate } from '../../util/validate';
 import { roomCreateReqBody } from '../documentation/roomCreate';
 
 export class RoomController {
   constructor(private roomUsecase: domain.RoomUsecase) {}
 
-  create = async (req: Request<{}, {}, roomCreateReqBody>, res: Response) => {
+  create = async (req: Request, res: Response) => {
+    const [vError, reqBody] = validate(req.body, roomCreateReqBody);
+    if (vError) {
+      return res.status(400).send(JSON.stringify(vError));
+    }
+
     const now = new Date();
-
-    // TODO 変換の際にbad requestでないことを確認
-    const reqBody = req.body;
-
     const room = {
       id: cuid(),
       ownerId: reqBody.ownerId,
@@ -22,21 +24,18 @@ export class RoomController {
       password: reqBody.password,
     };
 
-    const error = await this.roomUsecase.create(room);
-    if (error) {
-      return res.status(500).send(JSON.stringify({ error: error.message }));
+    const sError = await this.roomUsecase.create(room);
+    if (sError) {
+      return res.status(500).send(JSON.stringify({ error: sError.message }));
     }
-
-    return res.status(200).send(JSON.stringify({ data: { room } }));
+    return res.status(200).send(JSON.stringify(room));
   };
 
-  readAll = async (req: Request, res: Response) => {
-    const [error, rooms] = await this.roomUsecase.readAll();
-
-    if (error) {
-      return res.status(500).send(JSON.stringify({ error: error.message }));
+  readAll = async (_req: Request, res: Response) => {
+    const [sError, rooms] = await this.roomUsecase.readAll();
+    if (sError) {
+      return res.status(500).send(JSON.stringify({ error: sError.message }));
     }
-
     return res.status(200).send(JSON.stringify(rooms));
   };
 }

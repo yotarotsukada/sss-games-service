@@ -1,17 +1,10 @@
-import 'dotenv/config';
 import cors from 'cors';
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
+import { v1Router } from './api/route/v1';
 import { printLog } from './util/console';
-import {
-  roomOpen,
-  roomRegister,
-  roomSearch,
-  roomSearchAll,
-  roomState,
-  roomUpdate,
-} from './room/room';
 
 const app = express();
 const httpServer = createServer(app);
@@ -32,39 +25,18 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
+app.use(express.json());
+
 app.get('/', (req: Request, res: Response) => {
   printLog(`"/" was requested`);
   res.send('Express Server!!');
 });
-app.get('/user', (req: Request, res: Response) => {
+app.get('/api/v1/user', (req: Request, res: Response) => {
   printLog(`"/user" was requested`);
   setTimeout(() => res.send({ name: 'Yotaro' }), 1000);
 });
 
-app.post('/api/rooms', (req: Request, res: Response) => {
-  printLog(`"/api/users" was requested`);
-  roomRegister;
-});
-app.get('/api/rooms/users/:id', (req: Request, res: Response) => {
-  printLog(`"/api/rooms/users/:id" was requested`);
-  roomSearchAll;
-});
-app.get('/api/rooms/:id', (req: Request, res: Response) => {
-  printLog(`"/api/rooms/:id" was requested`);
-  roomSearch;
-});
-app.put('/api/rooms/:id', (req: Request, res: Response) => {
-  printLog(`"/api/rooms/:id" was requested`);
-  roomUpdate;
-});
-app.put('/api/rooms/:id/state', (req: Request, res: Response) => {
-  printLog(`"/api/rooms/:id"/state was requested`);
-  roomOpen;
-});
-app.put('/api/rooms/users/:id', (req: Request, res: Response) => {
-  printLog(`"/api/rooms/:id/game-state" was requested`);
-  roomState;
-});
+app.use('/api/v1', v1Router);
 
 const port = process.env.PORT || 8080;
 httpServer.listen(port, () => {

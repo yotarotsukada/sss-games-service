@@ -1,4 +1,4 @@
-import { DB } from '../../db/db';
+import { DB } from '../../db/memoryDB';
 import { tuple } from '../../util/tuple';
 
 export class RoomRepository implements domain.RoomRepository {

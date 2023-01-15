@@ -1,13 +1,13 @@
 import cuid from 'cuid';
 import { Request, Response } from 'express';
 import { validate } from '../../util/validate';
-import { roomCreateReqBody } from '../documentation/roomCreate';
+import schema from '../schema';
 
 export class RoomController {
   constructor(private roomUsecase: domain.RoomUsecase) {}
 
   create = async (req: Request, res: Response) => {
-    const [vError, reqBody] = validate(req.body, roomCreateReqBody);
+    const [vError, reqBody] = validate(req.body, schema.rooms.create.reqBody);
     if (vError) {
       return res.status(400).send(JSON.stringify(vError));
     }

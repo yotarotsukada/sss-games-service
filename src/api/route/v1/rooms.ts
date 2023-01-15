@@ -1,5 +1,5 @@
 import express from 'express';
-import { memoryDB } from '../../../db/db';
+import { memoryDB } from '../../../db/memoryDB';
 import { RoomRepository } from '../../../repository/memory/roomRepository.memory';
 import RoomUsecase from '../../../usecase/roomUsecase';
 import { RoomController } from '../../controller/roomController';

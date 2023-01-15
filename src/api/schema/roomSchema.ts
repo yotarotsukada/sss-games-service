@@ -7,3 +7,9 @@ export const create = {
     password: z.string().optional(),
   }),
 };
+
+export const readOne = {
+  reqParams: z.object({
+    id: z.string(),
+  }),
+};

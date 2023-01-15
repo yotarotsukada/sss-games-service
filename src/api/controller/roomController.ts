@@ -1,13 +1,13 @@
 import cuid from 'cuid';
 import { Request, Response } from 'express';
 import { validate } from '../../util/validate';
-import schema from '../schema';
+import { roomSchema } from '../schema';
 
 export class RoomController {
   constructor(private roomUsecase: domain.RoomUsecase) {}
 
   create = async (req: Request, res: Response) => {
-    const [vError, reqBody] = validate(req.body, schema.rooms.create.reqBody);
+    const [vError, reqBody] = validate(req.body, roomSchema.create.reqBody);
     if (vError) {
       return res.status(400).send(JSON.stringify(vError));
     }
@@ -37,5 +37,21 @@ export class RoomController {
       return res.status(500).send(JSON.stringify({ error: sError.message }));
     }
     return res.status(200).send(JSON.stringify(rooms));
+  };
+
+  readOne = async (req: Request, res: Response) => {
+    const [vError, reqParams] = validate(
+      req.params,
+      roomSchema.readOne.reqParams
+    );
+    if (vError) {
+      return res.status(500).send(JSON.stringify(vError));
+    }
+
+    const [sError, room] = await this.roomUsecase.readOne(reqParams.id);
+    if (sError) {
+      return res.status(500).send(JSON.stringify({ error: sError.message }));
+    }
+    return res.status(200).send(JSON.stringify(room));
   };
 }

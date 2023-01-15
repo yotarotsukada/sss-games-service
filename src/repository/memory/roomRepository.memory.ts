@@ -14,4 +14,20 @@ export class RoomRepository implements domain.RoomRepository {
     const rooms = this.database.rooms.selectAll();
     return tuple(undefined, rooms);
   };
+
+  readOne = async (id: string) => {
+    const found = this.database.rooms
+      .selectAll()
+      .find((room) => room.id === id);
+    if (!found) {
+      return tuple(
+        {
+          code: 401,
+          message: 'Not found',
+        },
+        undefined
+      );
+    }
+    return tuple(undefined, found);
+  };
 }

@@ -13,10 +13,12 @@ declare namespace domain {
   interface RoomRepository {
     create: (room: Room) => Promise<domain.Error>;
     readAll: () => Promise<[domain.Error, domain.Room[]]>;
+    readOne: (id: string) => Promise<[domain.Error, domain.Room | undefined]>;
   }
 
   interface RoomUsecase {
     create: (room: Room) => Promise<domain.Error>;
     readAll: () => Promise<[domain.Error, domain.Room[]]>;
+    readOne: (id: string) => Promise<[domain.Error, domain.Room | undefined]>;
   }
 }

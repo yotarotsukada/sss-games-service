@@ -30,4 +30,11 @@ export class RoomRepository implements domain.RoomRepository {
     }
     return tuple(undefined, found);
   };
+
+  readManyByUser = async (userId: string) => {
+    const found = this.database.rooms
+      .selectAll()
+      .filter((room) => room.ownerId === userId);
+    return tuple(undefined, found);
+  };
 }

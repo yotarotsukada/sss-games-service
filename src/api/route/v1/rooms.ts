@@ -15,8 +15,8 @@ export class Rooms {
     this.router.route('/').post((req, res) => {
       this.controller.create(req, res);
     });
-    this.router.route('/users/user-3').get((req, res) => {
-      this.controller.readAll(req, res);
+    this.router.route('/users/:userId').get((req, res) => {
+      this.controller.readManyByUser(req, res);
     });
     this.router.route('/:id').get((req, res) => {
       this.controller.readOne(req, res);

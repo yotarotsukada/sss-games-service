@@ -12,6 +12,10 @@ class RoomUsecase implements domain.RoomUsecase {
   readOne = (id: string) => {
     return this.roomRepository.readOne(id);
   };
+
+  readManyByUser = (userId: string) => {
+    return this.roomRepository.readManyByUser(userId);
+  };
 }
 
 export default RoomUsecase;

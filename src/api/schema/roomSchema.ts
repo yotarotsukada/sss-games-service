@@ -13,3 +13,9 @@ export const readOne = {
     id: z.string(),
   }),
 };
+
+export const readManyByUser = {
+  reqParams: z.object({
+    userId: z.string(),
+  }),
+};

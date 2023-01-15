@@ -54,4 +54,23 @@ export class RoomController {
     }
     return res.status(200).send(JSON.stringify(room));
   };
+
+  readManyByUser = async (req: Request, res: Response) => {
+    const [vError, reqParams] = validate(
+      req.params,
+      roomSchema.readManyByUser.reqParams
+    );
+    if (vError) {
+      return res.status(500).send(JSON.stringify(vError));
+    }
+
+    const [sError, rooms] = await this.roomUsecase.readManyByUser(
+      reqParams.userId
+    );
+    if (sError) {
+      return res.status(500).send(JSON.stringify({ error: sError.message }));
+    }
+
+    return res.status(200).send(JSON.stringify(rooms));
+  };
 }

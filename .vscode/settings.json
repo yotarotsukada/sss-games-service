@@ -1,0 +1,12 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "material-icon-theme.folders.associations": {
+    "domain": "Class",
+    "repository": "Database",
+    "usecase": "Tools",
+    "v1": "Routes"
+  },
+  "cSpell.words": [
+    "Usecase"
+  ]
+}

@@ -12,17 +12,20 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "cuid": "^2.1.8",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
-    "socket.io": "^4.5.2"
+    "socket.io": "^4.5.2",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.14",
     "@types/node": "^18.7.18",
     "concurrently": "^7.4.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.0",
     "nodemon": "^2.0.20",
     "prettier": "^2.7.1",
-    "typescript": "^4.8.3",
-    "husky": "^8.0.0"
+    "typescript": "^4.8.3"
   }
 }
